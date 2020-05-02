@@ -1,6 +1,6 @@
 {
   "name": "@alorel/rxstore",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Rxjs-powered redux-like store",
   "main": "index.js",
   "module": "esm5/index.js",

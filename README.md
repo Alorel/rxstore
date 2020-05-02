@@ -6,3 +6,5 @@ Docs, unit tests and all that good stuff will come
 once it's nice and ready.
 
 # v1.x should be considered unstable
+
+Semantic versioning will be present starting from v2.0

@@ -4,7 +4,6 @@ import {Action, AnyAction} from '../types/Action';
 import {ActionReducers} from '../types/ActionReducers';
 import {Store} from '../types/Store';
 import {def, defVisible} from './def';
-import {isObject} from './isObject';
 
 //tslint:disable:no-this-assignment
 // Assigning to this for better minification
@@ -53,12 +52,9 @@ export abstract class AbstractStore<S = any, A extends Action<any> = AnyAction<a
   }
 
   /** @inheritDoc */
-  public abstract add<K extends keyof S>(key: K, _store: Store<S[K]>): void;
-
-  /** @inheritDoc */
-  public addCleanup(logic: TeardownLogic): void {
+  public addCleanup(logic: TeardownLogic): this {
     if (!logic) {
-      return;
+      // no need to do anything
     } else if ('unsubscribe' in logic) {
       this[_subs].push(logic);
     } else if (typeof logic === 'function') {
@@ -66,6 +62,8 @@ export abstract class AbstractStore<S = any, A extends Action<any> = AnyAction<a
     } else {
       throw new TypeError('Invalid teardown logic');
     }
+
+    return this;
   }
 
   /** @inheritDoc */
@@ -135,16 +133,5 @@ export abstract class AbstractStore<S = any, A extends Action<any> = AnyAction<a
   /** @internal */
   public toJSON(): S {
     return this.getState();
-  }
-
-  protected checkAddable<K extends keyof S>(key: K, _store: Store<S[K]>): void {
-    // Only do sense-checking here. Extending classes must implement logic.
-    const currState = this.getState();
-
-    if (!isObject(currState)) {
-      throw new Error(`The store's state is not an object - cannot add ${key}.`);
-    } else if (key in currState) {
-      throw new Error(`Conflict: the store already has the ${key} key.`);
-    }
   }
 }

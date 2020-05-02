@@ -9,10 +9,10 @@ export function resolveSubscription<A extends Action<any>, S>(
   state$: BehaviorSubject<S>,
   actions$: Observable<A>,
   reducers: ActionReducers<A, S>
-): Subscription {
+): Subscription | null {
   const keys = Object.keys(reducers);
   if (!keys.length) {
-    return new Subscription();
+    return null;
   }
 
   return actions$

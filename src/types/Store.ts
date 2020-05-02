@@ -14,9 +14,7 @@ export interface Store<S = any, A extends Action<any> = AnyAction<any>> extends 
 
   actions(): Observable<A>;
 
-  add<K extends keyof S>(key: K, store: Store<S[K], AnyAction<any>>): void;
-
-  addCleanup(logic: TeardownLogic): void;
+  addCleanup(logic: TeardownLogic): this;
 
   close(): void;
 
@@ -25,4 +23,6 @@ export interface Store<S = any, A extends Action<any> = AnyAction<any>> extends 
   toJSON(): S;
 }
 
-export type RootStore<S extends object = {}, A extends Action<any> = AnyAction<any>> = Store<S, A>;
+export interface RootStore<S extends object = {}, A extends Action<any> = AnyAction<any>> extends Store<S, A> {
+  add<K extends keyof S>(key: K, store: Store<S[K], AnyAction<any>>): void;
+}
